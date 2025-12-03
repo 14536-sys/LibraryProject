@@ -1,0 +1,96 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// =======================
+// Base Class: Book
+// =======================
+class Book {
+protected:
+    string title;
+    string author;
+    string isbn;
+    bool available;
+
+public:
+    Book() : title(""), author(""), isbn(""), available(true) {}
+
+    Book(string t, string a, string i)
+        : title(t), author(a), isbn(i), available(true) {}
+
+    virtual void displayDetails() {
+        cout << "Title: " << title << endl;
+        cout << "Author: " << author << endl;
+        cout << "ISBN: " << isbn << endl;
+        cout << "Available: " << (available ? "Yes" : "No") << endl;
+    }
+
+    void borrowBook() {
+        if (available) {
+            available = false;
+            cout << "Book borrowed successfully.\n";
+        } else {
+            cout << "Book is currently unavailable.\n";
+        }
+    }
+
+    void returnBook() {
+        available = true;
+        cout << "Book returned successfully.\n";
+    }
+};
+
+// =======================
+// Derived Class: HardcopyBook
+// =======================
+class HardcopyBook : public Book {
+private:
+    string shelfNumber;
+
+public:
+    HardcopyBook(string t, string a, string i, string shelf)
+        : Book(t, a, i), shelfNumber(shelf) {}
+
+    void displayDetails() override {
+        Book::displayDetails();
+        cout << "Shelf Number: " << shelfNumber << endl;
+    }
+};
+
+// =======================
+// Derived Class: EBook
+// =======================
+class EBook : public Book {
+private:
+    string licenseEndDate;
+
+public:
+    EBook(string t, string a, string i, string licenseDate)
+        : Book(t, a, i), licenseEndDate(licenseDate) {}
+
+    void displayDetails() override {
+        Book::displayDetails();
+        cout << "License End Date: " << licenseEndDate << endl;
+    }
+};
+
+// =======================
+// Main Program
+// =======================
+int main() {
+    cout << "--- Hardcopy Book Example ---\n";
+    HardcopyBook hBook("C++ Programming", "Bjarne Stroustrup", "978123456789", "A12");
+    hBook.displayDetails();
+    hBook.borrowBook();
+    hBook.displayDetails();
+    hBook.returnBook();
+
+    cout << "\n--- EBook Example ---\n";
+    EBook eBook("Learn Python", "Mark Lutz", "978987654321", "2026-12-31");
+    eBook.displayDetails();
+    eBook.borrowBook();
+    eBook.displayDetails();
+    eBook.returnBook();
+
+    return 0;
+}
